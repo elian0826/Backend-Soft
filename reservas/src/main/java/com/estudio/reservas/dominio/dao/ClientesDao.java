@@ -122,7 +122,8 @@ public class ClientesDao implements ClientesDaoInterfaz {
     public Clientes findByDocumento(int documento) throws DaoException {
         String sql = "SELECT * FROM clientes WHERE documento = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapCliente(rs), documento);
+            List<Clientes> resultados = jdbcTemplate.query(sql, (rs, rowNum) -> mapCliente(rs), documento);
+            return resultados.isEmpty() ? null : resultados.get(0);
         } catch (DataAccessException ex) {
             throw new DaoException("Error al buscar cliente por documento: " + ex.getMessage(), ex);
         } catch (Exception e) {
